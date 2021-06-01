@@ -1,6 +1,8 @@
 package com.pancm.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,13 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 * @date 2018年1月3日
  */
 @RestController
+@RefreshScope
 public class ClientController {
-	
-	@Value("${word}")
-	private String word;
+
+    @Value("${hello1}")
+    private String hello1;
+    @Value("${hello2}")
+    private String hello2;
+    @Value("${hello3}")
+    private String hello3;
+    @Value("${xzrzConfig.version:}")
+    private String version;
+
+    @Autowired
+    TestConfig testConfig;
 	
     @RequestMapping("/hello")
-    public String index(@RequestParam String name) {
-        return name+","+this.word;
+    public String index(@RequestParam(required = false) String name) {
+        return name+"," + "hello1====" + hello1 + "&hello2===" + hello2 + "&hello3===" + hello3 + "&ip=" + testConfig.getAppip() + "version=" + version;
     }
 }
